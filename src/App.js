@@ -1,25 +1,242 @@
-import logo from './logo.svg';
-import './App.css';
+import { useForm } from "react-hook-form";
+import axios from "axios";
 
-function App() {
+export default function App() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+   const onSubmit = async (data) => {
+    const response = await axios.post("http://localhost:8080/register", data)
+  
+
+   console.log(response)
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
+      <input
+        type="text"
+        placeholder="Enter your full name"
+        {...register("fullName", {
+          required: true,
+          pattern: /^[A-Za-z ]+$/,
+          minLength: 4,
+          maxLength: 30,
+        })}
+        autoFocus
+      />
+      {errors.fullName && <p role="alert">Full name is required</p>}
+      <input
+        type="email"
+        placeholder="Enter your email"
+        {...register("email", { required: true })}
+      />
+      {errors.email && <p role="alert">Enter a valid email</p>}
+      <input
+        type="text"
+        placeholder="Enter your phone number"
+        {...register("phone", {
+          required: true,
+          pattern: /^[0-9]+$/,
+          minLength: 10,
+          maxLength: 10,
+        })}
+      />
+      {errors.phone && (
+        <p role="alert">Enter a proper phone number with 10 digits</p>
+      )}
+      <input
+        type="date"
+        placeholder="Enter your Date of Birth"
+        {...register("dob", { required: true })}
+      />
+      {errors.dob && <p role="alert">Enter your Date of Birth</p>}
+      <div>
+        <input
+          id="genderMale"
+          type="radio"
+          name="gender"
+          value="male"
+          {...register("gender", { required: true })}
+        />
+        <label htmlFor="genderMale">Male</label>
+      </div>
+
+      <div>
+        <input
+          id="genderFemale"
+          type="radio"
+          name="gender"
+          value="female"
+          {...register("gender", { required: true })}
+        />
+        <label htmlFor="genderFemale">Female</label>
+      </div>
+
+      <div>
+        <input
+          id="genderOther"
+          type="radio"
+          name="gender"
+          value="other"
+          {...register("gender", { required: true })}
+        />
+        <label htmlFor="genderOther">Other</label>
+      </div>
+      {errors.gender && <p role="alert">Select your gender</p>}
+
+      
+
+      <input
+        type="text"
+        placeholder="Enter your parent / guardian / spouse name"
+        {...register("fname", {
+          required: true,
+          pattern: /^[A-Za-z ]+$/,
+          minLength: 4,
+          maxLength: 30,
+        })}
+      />
+      {errors.fname && <p role="alert">Parent&quot;s name is required</p>}
+
+      <input
+        type="text"
+        placeholder="Enter your parent / guardian / spouse phone number"
+        {...register("fphone", {
+          required: true,
+          pattern: /^[0-9]+$/,
+          minLength: 10,
+          maxLength: 10,
+        })}
+      />
+      {errors.fname && (
+        <p role="alert">Enter a proper phone number with 10 digits</p>
+      )}
+
+      <textarea
+        placeholder="Enter your local address (where you stay in Jaipur)"
+        {...register("laddress", { required: true })}
+      ></textarea>
+      {errors.laddress && <p role="alert">Enter your local address</p>}
+
+      <div>
+        <input
+          id="same"
+          type="checkbox"
+          name="same"
+          value="same"
+          {...register("same")}
+        />
+        <label htmlFor="same">Same as Permanent Address</label>
+      </div>
+
+      <div>
+        <input
+          id="student"
+          type="radio"
+          name="areyoua"
+          value="student"
+          {...register("areyoua")}
+          checked={true}
+        />
+        <label htmlFor="student">Student</label>
+      </div>
+
+      <div>
+        <input
+          id="working"
+          type="radio"
+          name="areyoua"
+          value="working"
+          {...register("areyoua")}
+        />
+        <label htmlFor="working">Working Professional</label>
+      </div>
+
+      <div>
+        <input
+          type="text"
+          placeholder="Your latest educational degree / diploma"
+          {...register("qualification", {
+            required: true,
+            minLength: 2,
+            maxLength: 30,
+          })}
+        />
+        {errors.qualification && <p role="alert">Qualification is required</p>}
+
+        <input
+          type="text"
+          placeholder="Completion Year"
+          {...register("qualificationYear", {
+            required: true,
+          })}
+        />
+        {errors.qualificationYear && (
+          <p role="alert">Qualification Year is required</p>
+        )}
+
+        <input
+          type="text"
+          placeholder="College / University"
+          {...register("college", {
+            required: true,
+          })}
+        />
+        {errors.college && <p role="alert">College is required</p>}
+      </div>
+
+      <div>
+        <input
+          type="text"
+          placeholder="Designation"
+          {...register("designation", {
+            required: true,
+          })}
+        />
+        {errors.designation && <p role="alert">Designation is required</p>}
+
+        <input
+          type="text"
+          placeholder="Company"
+          {...register("company", {
+            required: true,
+          })}
+        />
+        {errors.company && <p role="alert">Company name is required</p>}
+      </div>
+
+      <div>
+        <select
+          defaultValue="Course you opted for"
+          name="course"
+          id="course"
+          {...register("course", { required: true })}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          <option disabled="" value="">
+            Course you opted for
+          </option>
+          <option value="advanced java">Advance Java</option>
+          <option value="android">Android</option>
+          <option value="computer basics">Computer Basics</option>
+          <option value="core java">Core Java</option>
+          <option value="digital marketing">Digital Marketing</option>
+          <option value="full stack">Full Stack Development</option>
+          <option value="graphic design">Graphic Design</option>
+          <option value="node js">Node JS</option>
+          <option value="photoshop">Photoshop</option>
+          <option value="php">PHP</option>
+          <option value="python">Python</option>
+          <option value="react js">React JS</option>
+          <option value="web design">Web Design</option>
+          <option value="otherCourse">Other Course</option>
+        </select>
+      </div>
+
+      <input type="submit" value="Register" />
+    </form>
   );
 }
-
-export default App;
