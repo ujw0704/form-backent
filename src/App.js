@@ -1,28 +1,61 @@
-import { useForm } from "react-hook-form";
-import axios from "axios";
-// import Data from "Data.js"
+import React, { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import axios from 'axios';
+import Data from './Data.js';
+
 // import Form from "./Form"
 export default function App() {
+  const [newdata, setData] = useState([])
   const {
-  register,
-  handleSubmit,
-  formState: { errors },
+    register,
+    handleSubmit,
+    formState: { errors },
   } = useForm();
 
-   const onSubmit = async (data) => {
+
+
+
+  const onSubmit = async (data) => {
     const response = await axios.post("http://localhost:8080/register", data)
 
+    // console.log(response)
+
+    if(response.data === "Data is Saved" && response.status === 200){
+      setData("Go")
+    }
 
 
+    //  console.log(response.data)
 
-  //  console.log(response.data)
   };
+
+  // fetching data in mongodb
+    useEffect(()=>{
+      axios.get("http://localhost:8080/newdata")
+
+      .then((response) => {
+
+        console.log(response)
+         setData(response.data.mongdata)
+      })
+      .catch((error) => {
+
+        console.error('Error fetching data:', error);
+      });
+  }, [newdata]);
+
+
+
+
+
+
+  console.log(newdata)
 
   return (
 
     <>
       {/* <Form /> */}
-     
+
 
       <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
         <input
@@ -245,7 +278,11 @@ export default function App() {
         </div>
 
         <input type="submit" value="Register" />
+
       </form>
+
+      {Array.isArray(newdata) && newdata.length > 0 ? <Data newdata={newdata} /> : ""}
+
     </>
   )
 }
