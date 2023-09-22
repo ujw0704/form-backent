@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import Data from './Data.js';
-
+import "./app.css"
 // import Form from "./Form"
 export default function App() {
   const [newdata, setData] = useState([])
